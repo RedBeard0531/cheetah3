@@ -1785,10 +1785,10 @@ class ModuleCompiler(SettingsManager, GenUtils):
                                   ]
 
         self._moduleConstants = [
-            "VFFSL=valueFromFrameOrSearchList",
-            "VFSL=valueFromSearchList",
-            "VFN=valueForName",
-            "currentTime=time.time",
+            "VFFSL = valueFromFrameOrSearchList",
+            "VFSL = valueFromSearchList",
+            "VFN = valueForName",
+            "currentTime = time.time",
             ]
 
     def compile(self):
