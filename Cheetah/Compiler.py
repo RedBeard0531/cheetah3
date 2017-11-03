@@ -2061,7 +2061,7 @@ class ModuleCompiler(SettingsManager, GenUtils):
 if __CHEETAH_versionTuple__ < RequiredCheetahVersionTuple:
     raise AssertionError(
       'This template was compiled with Cheetah version'
-      ' %%s. Templates compiled before version %%s must be recompiled.'%%(
+      ' %%s. Templates compiled before version %%s must be recompiled.' %% (
          __CHEETAH_version__, RequiredCheetahVersion))
 
 ##################################################
