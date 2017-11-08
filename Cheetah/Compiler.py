@@ -239,9 +239,9 @@ class GenUtils(object):
               $a.b.c[1].d().x.y.z
 
             nameChunks is the list
-              [ ('a.b.c', True, '[1]'), # A
-                ('d', False, '()'),     # B
-                ('x.y.z', True, ''),    # C
+              [ ('a.b.c', True, '[1]'),  # A
+                ('d', False, '()'),      # B
+                ('x.y.z', True, ''),     # C
               ]
 
         When this method is fed the list above it returns::
@@ -259,7 +259,7 @@ class GenUtils(object):
           # optionally used instead of VFFSL
           VFSL = NameMapper.valueFromSearchList
           SL = self.searchList()
-          useAC = self.setting('useAutocalling') # True in this example
+          useAC = self.setting('useAutocalling')  # True in this example
 
           A = ('a.b.c', True, '[1]')
           B = ('d', False, '()')
@@ -449,7 +449,7 @@ class MethodCompiler(GenUtils):
         if self.setting('alwaysFilterNone'):
             if rawExpr and rawExpr.find('\n') == -1 and \
                     rawExpr.find('\r') == -1:
-                self.addChunk("_v = %s # %r" % (chunk, rawExpr))
+                self.addChunk("_v = %s  # %r" % (chunk, rawExpr))
                 if lineCol:
                     self.appendToPrevChunk(' on line %s, col %s' % lineCol)
             else:
@@ -557,7 +557,7 @@ class MethodCompiler(GenUtils):
                                   lineCol=lineCol)
 
         if self.setting('outputRowColComments'):
-            self.appendToPrevChunk(' # from line %s, col %s' % lineCol + '.')
+            self.appendToPrevChunk('  # from line %s, col %s' % lineCol + '.')
         if cacheInfo:
             self.endCacheRegion()
 
@@ -621,7 +621,7 @@ class MethodCompiler(GenUtils):
             expr = expr + ':'
         self.addChunk(expr)
         if lineCol:
-            self.appendToPrevChunk(' # generated from line %s, col %s'
+            self.appendToPrevChunk('  # generated from line %s, col %s'
                                    % lineCol)
         self.indent()
 
@@ -634,7 +634,7 @@ class MethodCompiler(GenUtils):
 
         self.addChunk(expr)
         if lineCol:
-            self.appendToPrevChunk(' # generated from line %s, col %s'
+            self.appendToPrevChunk('  # generated from line %s, col %s'
                                    % lineCol)
         self.indent()
 
@@ -1131,7 +1131,7 @@ class AutoMethodCompiler(MethodCompiler):
                           ' and not callable(self.transaction)):')
             self.indent()
             self.addChunk('trans = self.transaction'
-                          ' # is None unless self.awake() was called')
+                          '  # is None unless self.awake() was called')
             self.dedent()
             self.addChunk('if not trans:')
             self.indent()
@@ -1519,7 +1519,7 @@ class ClassCompiler(GenUtils):
         codeChunk = 'self.' + methodName + '(trans=trans)'
         self.addChunk(codeChunk)
 
-        # self.appendToPrevChunk(' # generated from ' + repr(rawDirective) )
+        # self.appendToPrevChunk('  # generated from ' + repr(rawDirective) )
         # if self.setting('outputRowColComments'):
         #    self.appendToPrevChunk(' at line %s, col %s' % lineCol + '.')
 
