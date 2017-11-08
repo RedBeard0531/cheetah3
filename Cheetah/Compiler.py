@@ -223,8 +223,7 @@ class GenUtils(object):
         (Unified Dotted Notation with the SearchList).
 
         nameChunks = list of var subcomponents represented as tuples
-          [ (name,useAC,remainderOfExpr),
-          ]
+          [ (name, useAC, remainderOfExpr), ... ]
         where:
           name = the dotted name base
           useAC = where NameMapper should use autocalling on namemapperPart
@@ -240,14 +239,14 @@ class GenUtils(object):
               $a.b.c[1].d().x.y.z
 
             nameChunks is the list
-              [ ('a.b.c',True,'[1]'), # A
-                ('d',False,'()'),     # B
-                ('x.y.z',True,''),    # C
+              [ ('a.b.c', True, '[1]'), # A
+                ('d', False, '()'),     # B
+                ('x.y.z', True, ''),    # C
               ]
 
         When this method is fed the list above it returns::
 
-          VFN(VFN(VFFSL(SL, 'a.b.c',True)[1], 'd',False)(), 'x.y.z',True)
+          VFN(VFN(VFFSL(SL, 'a.b.c', True)[1], 'd', False)(), 'x.y.z', True)
 
         which can be represented as::
 
@@ -262,13 +261,13 @@ class GenUtils(object):
           SL = self.searchList()
           useAC = self.setting('useAutocalling') # True in this example
 
-          A = ('a.b.c',True,'[1]')
-          B = ('d',False,'()')
-          C = ('x.y.z',True,'')
+          A = ('a.b.c', True, '[1]')
+          B = ('d', False, '()')
+          C = ('x.y.z', True, '')
 
-          C` = VFN( VFN( VFFSL(SL, 'a.b.c',True)[1],
-                         'd',False)(),
-                    'x.y.z',True)
+          C` = VFN( VFN( VFFSL(SL, 'a.b.c', True)[1],
+                         'd', False)(),
+                    'x.y.z', True)
              = VFN(B`, name='x.y.z', executeCallables=True)
 
           B` = VFN(A`, name=B[0], executeCallables=(useAC and B[1]))B[2]
@@ -295,27 +294,27 @@ class GenUtils(object):
                 beforeFirstDot = name[:firstDotIdx]
                 afterDot = name[firstDotIdx+1:]
                 pythonCode = ('VFN(' + beforeFirstDot +
-                              ',"' + afterDot +
-                              '",' + repr(defaultUseAC and useAC) + ')'
+                              ', "' + afterDot +
+                              '", ' + repr(defaultUseAC and useAC) + ')'
                               + remainder)
             else:
                 pythonCode = name+remainder
         elif self.setting('useStackFrames'):
-            pythonCode = ('VFFSL(SL,'
-                          '"' + name + '",'
+            pythonCode = ('VFFSL(SL, '
+                          '"' + name + '", '
                           + repr(defaultUseAC and useAC) + ')'
                           + remainder)
         else:
-            pythonCode = ('VFSL([locals()]+SL+[globals(), builtin],'
-                          '"' + name + '",'
+            pythonCode = ('VFSL([locals()]+SL+[globals(), builtin], '
+                          '"' + name + '", '
                           + repr(defaultUseAC and useAC) + ')'
                           + remainder)
         ##
         while nameChunks:
             name, useAC, remainder = nameChunks.pop()
             pythonCode = ('VFN(' + pythonCode +
-                          ',"' + name +
-                          '",' + repr(defaultUseAC and useAC) + ')'
+                          ', "' + name +
+                          '", ' + repr(defaultUseAC and useAC) + ')'
                           + remainder)
         return pythonCode
 
@@ -678,7 +677,7 @@ class MethodCompiler(GenUtils):
                 chunk += '=' + arg[1]
             argStringChunks.append(chunk)
         signature = \
-            "def " + functionName + "(" + ','.join(argStringChunks) + "):"
+            "def " + functionName + "(" + ', '.join(argStringChunks) + "):"
         self.addIndentingDirective(signature)
         self.addChunk('#'+parserComment)
 
@@ -1215,7 +1214,7 @@ _initMethod_initCheetah = """\
 if not self._CHEETAH__instanceInitialized:
     cheetahKWArgs = {}
     allowedKWs = 'searchList namespaces filter filtersLib errorCatcher'.split()
-    for k,v in KWs.items():
+    for k, v in KWs.items():
         if k in allowedKWs: cheetahKWArgs[k] = v
     self._initCheetahInstance(**cheetahKWArgs)
 """.replace('\n', '\n'+' '*8)
@@ -1453,7 +1452,7 @@ class ClassCompiler(GenUtils):
             if arg[1] is not None:
                 chunk += '=' + arg[1]
             argStringChunks.append(chunk)
-        argString = ','.join(argStringChunks)
+        argString = ', '.join(argStringChunks)
 
         self.addFilteredChunk(
             'super(%(className)s, self).%(methodName)s(%(argString)s)'
