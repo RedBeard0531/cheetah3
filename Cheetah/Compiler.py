@@ -621,7 +621,7 @@ class MethodCompiler(GenUtils):
             expr = expr + ':'
         self.addChunk(expr)
         if lineCol:
-            self.appendToPrevChunk('  # generated from line %s, col %s'
+            self.appendToPrevChunk('  # Generated from line %s, col %s'
                                    % lineCol)
         self.indent()
 
@@ -634,7 +634,7 @@ class MethodCompiler(GenUtils):
 
         self.addChunk(expr)
         if lineCol:
-            self.appendToPrevChunk('  # generated from line %s, col %s'
+            self.appendToPrevChunk('  # Generated from line %s, col %s'
                                    % lineCol)
         self.indent()
 
@@ -775,7 +775,7 @@ class MethodCompiler(GenUtils):
         # @@TR: add this to a special class var as well
         self.addChunk('')
 
-        self.addChunk('## START CACHE REGION: ID=' + ID
+        self.addChunk('# START CACHE REGION: ID=' + ID
                       + '. line %s, col %s' % lineCol + ' in the source.')
 
         self.addChunk('_RECACHE_%(ID)s = False' % locals())
@@ -851,7 +851,7 @@ class MethodCompiler(GenUtils):
         self.addChunk('del _cacheCollector_%(ID)s' % locals())
         self.addChunk('del _orig_trans%(ID)s' % locals())
         self.dedent()
-        self.addChunk('## END CACHE REGION: '+ID)
+        self.addChunk('# END CACHE REGION: '+ID)
         self.addChunk('')
 
     def nextCallRegionID(self):
@@ -869,7 +869,7 @@ class MethodCompiler(GenUtils):
         # attrib of current methodCompiler
         self._callRegionsStack.append((ID, callDetails))
 
-        self.addChunk('## START %(regionTitle)s REGION: ' % locals() + ID
+        self.addChunk('# START %(regionTitle)s REGION: ' % locals() + ID
                       + ' of ' + functionName
                       + ' at line %s, col %s' % lineCol + ' in the source.')
         self.addChunk('_orig_trans%(ID)s = trans' % locals())
@@ -938,7 +938,7 @@ class MethodCompiler(GenUtils):
                 '%(functionName)s(%(initialKwArgs)s**_callKws%(ID)s)'
                 % locals())
             self.addChunk('del _callKws%(ID)s' % locals())
-        self.addChunk('## END %(regionTitle)s REGION: ' % locals() + ID
+        self.addChunk('# END %(regionTitle)s REGION: ' % locals() + ID
                       + ' of ' + functionName
                       + ' at line %s, col %s' % lineCol + ' in the source.')
         self.addChunk('')
@@ -957,7 +957,7 @@ class MethodCompiler(GenUtils):
 
         # attrib of current methodCompiler
         self._captureRegionsStack.append((ID, captureDetails))
-        self.addChunk('## START CAPTURE REGION: ' + ID + ' ' + assignTo
+        self.addChunk('# START CAPTURE REGION: ' + ID + ' ' + assignTo
                       + ' at line %s, col %s' % lineCol + ' in the source.')
         self.addChunk('_orig_trans%(ID)s = trans' % locals())
         self.addChunk(
@@ -1163,13 +1163,13 @@ class AutoMethodCompiler(MethodCompiler):
                 self.addChunk('_filter = self._CHEETAH__currentFilter')
         self.addChunk('')
         self.addChunk("#"*40)
-        self.addChunk('## START - generated method body')
+        self.addChunk('# START - generated method body')
         self.addChunk('')
 
     def _addAutoCleanupCode(self):
         self.addChunk('')
         self.addChunk("#"*40)
-        self.addChunk('## END - generated method body')
+        self.addChunk('# END - generated method body')
         self.addChunk('')
 
         if not self._isGenerator:
@@ -1237,7 +1237,7 @@ class ClassCompiler(GenUtils):
         self._setupState()
         methodCompiler = self._spawnMethodCompiler(
             mainMethodName,
-            initialMethodComment='## CHEETAH: main method '
+            initialMethodComment='# CHEETAH: main method '
             'generated for this template')
 
         self._setActiveMethodCompiler(methodCompiler)
@@ -1473,7 +1473,7 @@ class ClassCompiler(GenUtils):
         catcherMeth = self._spawnMethodCompiler(
             methodName,
             klass=MethodCompiler,
-            initialMethodComment=('## CHEETAH: Generated from ' + rawCode +
+            initialMethodComment=('# CHEETAH: generated from ' + rawCode +
                                   ' at line %s, col %s' % lineCol + '.')
             )
         catcherMeth.setMethodSignature(
@@ -1519,7 +1519,7 @@ class ClassCompiler(GenUtils):
         codeChunk = 'self.' + methodName + '(trans=trans)'
         self.addChunk(codeChunk)
 
-        # self.appendToPrevChunk('  # generated from ' + repr(rawDirective) )
+        # self.appendToPrevChunk('  # Generated from ' + repr(rawDirective) )
         # if self.setting('outputRowColComments'):
         #    self.appendToPrevChunk(' at line %s, col %s' % lineCol + '.')
 
@@ -1543,7 +1543,7 @@ class ClassCompiler(GenUtils):
         def addMethods():
             classDefChunks.extend([
                 ind + '#'*50,
-                ind + '## CHEETAH GENERATED METHODS',
+                ind + '# CHEETAH GENERATED METHODS',
                 '\n',
                 self.methodDefs(),
                 ])
@@ -1551,7 +1551,7 @@ class ClassCompiler(GenUtils):
         def addAttributes():
             classDefChunks.extend([
                 ind + '#'*50,
-                ind + '## CHEETAH GENERATED ATTRIBUTES',
+                ind + '# CHEETAH GENERATED ATTRIBUTES',
                 '\n',
                 self.attributes(),
                 ])
@@ -2049,11 +2049,11 @@ class ModuleCompiler(SettingsManager, GenUtils):
 %(docstring)s
 
 ##################################################
-## DEPENDENCIES
+# DEPENDENCIES
 %(imports)s
 
 ##################################################
-## MODULE CONSTANTS
+# MODULE CONSTANTS
 %(constants)s
 %(specialVars)s
 
@@ -2064,11 +2064,11 @@ if __CHEETAH_versionTuple__ < RequiredCheetahVersionTuple:
          __CHEETAH_version__, RequiredCheetahVersion))
 
 ##################################################
-## CLASSES
+# CLASSES
 
 %(classes)s
 
-## END CLASS DEFINITION
+# END CLASS DEFINITION
 
 if not hasattr(%(mainClassName)s, '_initCheetahAttributes'):
     templateAPIClass = getattr(%(mainClassName)s,
@@ -2141,7 +2141,7 @@ if not hasattr(%(mainClassName)s, '_initCheetahAttributes'):
 # For more information visit http://cheetahtemplate.org/
 
 ##################################################
-## if run from command line:
+# if run from command line:
 if __name__ == '__main__':
     from Cheetah.TemplateCmdLineIface import CmdLineIface
     CmdLineIface(templateObj=%(className)s()).run()

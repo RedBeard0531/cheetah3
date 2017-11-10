@@ -2119,7 +2119,7 @@ class _HighLevelParser(_LowLevelParser):
         endOfFirstLinePos = self.findEOL()
         self._eatRestOfDirectiveTag(isLineClearToStartToken, endOfFirstLinePos)
         signature = ' '.join([line.strip() for line in signature.splitlines()])
-        parserComment = ('## CHEETAH: generated from ' + signature +
+        parserComment = ('# CHEETAH: generated from ' + signature +
                          ' at line %s, col %s' % self.getRowCol(startPos)
                          + '.')
 
@@ -2140,7 +2140,7 @@ class _HighLevelParser(_LowLevelParser):
                           argsList, startPos, endPos):
         # filtered in calling method
         fullSignature = self[startPos:endPos]
-        parserComment = ('## Generated from ' + fullSignature +
+        parserComment = ('# Generated from ' + fullSignature +
                          ' at line %s, col %s' % self.getRowCol(startPos)
                          + '.')
         isNestedDef = (self.setting('allowNestedDefScopes')
@@ -2228,7 +2228,7 @@ class _HighLevelParser(_LowLevelParser):
         self._applyExpressionFilters(self[startPos:self.pos()], 'super',
                                      startPos=startPos)
 
-        # parserComment = ('## CHEETAH: generated from ' + signature +
+        # parserComment = ('# CHEETAH: generated from ' + signature +
         #                 ' at line %s, col %s' % self.getRowCol(startPos)
         #                 + '.')
 
