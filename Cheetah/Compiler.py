@@ -2066,6 +2066,7 @@ if __CHEETAH_versionTuple__ < RequiredCheetahVersionTuple:
 ##################################################
 # CLASSES
 
+
 %(classes)s
 
 # END CLASS DEFINITION
