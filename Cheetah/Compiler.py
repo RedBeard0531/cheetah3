@@ -394,10 +394,11 @@ class MethodCompiler(GenUtils):
 
     def wrapCode(self):
         self.commitStrConst()
+        docString = self.docString()
         methodDefChunks = (
             self.methodSignature(),
-            '\n',
-            self.docString(),
+            '\n' if docString else '',
+            docString,
             self.methodBody())
         methodDef = ''.join(methodDefChunks)
         self._methodDef = methodDef
@@ -1164,7 +1165,6 @@ class AutoMethodCompiler(MethodCompiler):
         self.addChunk('')
         self.addChunk("#"*40)
         self.addChunk('# START - generated method body')
-        self.addChunk('')
 
     def _addAutoCleanupCode(self):
         self.addChunk('')
@@ -1174,11 +1174,11 @@ class AutoMethodCompiler(MethodCompiler):
 
         if not self._isGenerator:
             self.addStop()
-        self.addChunk('')
 
     def addStop(self, expr=None):
         self.addChunk(
             'return _dummyTrans and trans.response().getvalue() or ""')
+        self.addChunk('')
 
     def addMethArg(self, name, defVal=None):
         self._argStringList.append((name, defVal))
@@ -1203,7 +1203,7 @@ class AutoMethodCompiler(MethodCompiler):
                                    for decorator in self._decorators]))
         output.append(self._indent + "def "
                       + self.methodName() + "(" +
-                      argString + "):\n\n")
+                      argString + "):\n")
         return ''.join(output)
 
 
@@ -1544,7 +1544,7 @@ class ClassCompiler(GenUtils):
             classDefChunks.extend([
                 ind + '#'*50,
                 ind + '# CHEETAH GENERATED METHODS',
-                '\n',
+                '',
                 self.methodDefs(),
                 ])
 
@@ -1552,7 +1552,6 @@ class ClassCompiler(GenUtils):
             classDefChunks.extend([
                 ind + '#'*50,
                 ind + '# CHEETAH GENERATED ATTRIBUTES',
-                '\n',
                 self.attributes(),
                 ])
         if self.setting('outputMethodsBeforeAttributes'):
@@ -1582,7 +1581,7 @@ class ClassCompiler(GenUtils):
     def methodDefs(self):
         methodDefs = [
             methGen.methodDef() for methGen in self._finishedMethods()]
-        return '\n\n'.join(methodDefs)
+        return '\n'.join(methodDefs)
 
     def attributes(self):
         try:
@@ -2047,7 +2046,6 @@ class ModuleCompiler(SettingsManager, GenUtils):
 
         moduleDef = """%(header)s
 %(docstring)s
-
 ##################################################
 # DEPENDENCIES
 %(imports)s
@@ -2099,7 +2097,8 @@ if not hasattr(%(mainClassName)s, '_initCheetahAttributes'):
 
     def moduleHeader(self):
         header = self._moduleShBang + '\n'
-        header += self._moduleEncodingStr + '\n'
+        if self._moduleEncodingStr:
+            header += self._moduleEncodingStr + '\n'
         if self._moduleHeaderLines:
             offSet = self.setting('commentOffset')
 
@@ -2113,9 +2112,9 @@ if not hasattr(%(mainClassName)s, '_initCheetahAttributes'):
         if not self._moduleDocStringLines:
             return ''
 
-        return ('"""' +
+        return ('\n"""' +
                 '\n'.join(self._moduleDocStringLines) +
-                '\n"""\n')
+                '\n"""\n\n')
 
     def specialVars(self):
         chunks = []
