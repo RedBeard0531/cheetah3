@@ -2067,7 +2067,9 @@ if __CHEETAH_versionTuple__ < RequiredCheetahVersionTuple:
 
 %(classes)s
 
+
 # END CLASS DEFINITION
+
 
 if not hasattr(%(mainClassName)s, '_initCheetahAttributes'):
     templateAPIClass = getattr(%(mainClassName)s,
