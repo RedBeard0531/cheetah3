@@ -459,10 +459,15 @@ class MethodCompiler(GenUtils):
                 self.addChunk("_v = %s" % chunk)
 
             if self.setting('useFilters'):
-                self.addChunk("if _v is not None: write(_filter(_v%s))"
-                              % filterArgs)
+                self.addChunk("if _v is not None:")
+                self.indent()
+                self.addChunk("write(_filter(_v%s))" % filterArgs)
+                self.dedent()
             else:
-                self.addChunk("if _v is not None: write(str(_v))")
+                self.addChunk("if _v is not None:")
+                self.indent()
+                self.addChunk("write(str(_v))")
+                self.dedent()
         else:
             if self.setting('useFilters'):
                 self.addChunk("write(_filter(%s%s))" % (chunk, filterArgs))
@@ -554,7 +559,10 @@ class MethodCompiler(GenUtils):
             self.addFilteredChunk(expr, filterArgs, rawPlaceholder,
                                   lineCol=lineCol)
             self.dedent()
-            self.addChunk('except NotFound: pass')
+            self.addChunk('except NotFound:')
+            self.indent()
+            self.addChunk('pass')
+            self.dedent()
         else:
             self.addFilteredChunk(expr, filterArgs, rawPlaceholder,
                                   lineCol=lineCol)
@@ -1151,7 +1159,10 @@ class AutoMethodCompiler(MethodCompiler):
                 self.addChunk('self.transaction = trans')
             self.addChunk('_dummyTrans = True')
             self.dedent()
-            self.addChunk('else: _dummyTrans = False')
+            self.addChunk('else:')
+            self.indent()
+            self.addChunk('_dummyTrans = False')
+            self.dedent()
         else:
             self.addChunk('trans = DummyTransaction()')
             self.addChunk('_dummyTrans = True')
@@ -1226,7 +1237,8 @@ if not self._CHEETAH__instanceInitialized:
     allowedKWs = \\
         'searchList namespaces filter filtersLib errorCatcher'.split()
     for k, v in KWs.items():
-        if k in allowedKWs: cheetahKWArgs[k] = v
+        if k in allowedKWs:
+            cheetahKWArgs[k] = v
     self._initCheetahInstance(**cheetahKWArgs)
 """.replace('\n', '\n'+' '*8)
 
@@ -1317,7 +1329,9 @@ class ClassCompiler(GenUtils):
         if self._mainMethodName == 'respond':
             if self.setting('setup__str__method'):
                 self._generatedAttribs.append(
-                    'def __str__(self): return self.respond()')
+                    '''\
+def __str__(self):
+    return self.respond()''')
         self.addAttribute('_mainCheetahMethod_for_' + self._className +
                           ' = ' + repr(self._mainMethodName))
 
