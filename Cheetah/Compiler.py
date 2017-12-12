@@ -1771,29 +1771,40 @@ class ModuleCompiler(SettingsManager, GenUtils):
         self._moduleDocStringLines = []
         self._specialVars = {}
         self._importStatements = [
-            "import sys",
+            "import sys"
+            "  # noqa: F401 imported but unused",
             "import os",
-            "import os.path",
+            "import os.path"
+            "  # noqa: F401 imported but unused",
             'try:',
             '    import builtins as builtin',
             'except ImportError:',
-            '    import __builtin__ as builtin',
-            "from os.path import getmtime, exists",
+            '    import __builtin__ as builtin'
+            "  # noqa: F401 imported but unused",
+            "from os.path import getmtime, exists"
+            "  # noqa: F401 imported but unused",
             "import time",
-            "import types",
+            "import types"
+            "  # noqa: F401 imported but unused",
             "from Cheetah.Version import MinCompatibleVersion as "
             "RequiredCheetahVersion",
-            "from Cheetah.Version import \\\n    "
-            "MinCompatibleVersionTuple as RequiredCheetahVersionTuple",
+            "from Cheetah.Version import \\\n"
+            "    MinCompatibleVersionTuple as RequiredCheetahVersionTuple",
             "from Cheetah.Template import Template",
             "from Cheetah.DummyTransaction import *",
-            "from Cheetah.NameMapper import NotFound, \\\n    "
-            "valueForName, valueFromSearchList, "
-            "valueFromFrameOrSearchList",
-            "from Cheetah.CacheRegion import CacheRegion",
-            "import Cheetah.Filters as Filters",
-            "import Cheetah.ErrorCatchers as ErrorCatchers",
-            "from Cheetah.compat import unicode",
+            "from Cheetah.NameMapper import NotFound"
+            "  # noqa: F401 imported but unused",
+            "from Cheetah.NameMapper import "
+            "valueForName, valueFromSearchList, \\\n"
+            "    valueFromFrameOrSearchList",
+            "from Cheetah.CacheRegion import CacheRegion"
+            "  # noqa: F401 imported but unused",
+            "import Cheetah.Filters as Filters"
+            "  # noqa: F401 imported but unused",
+            "import Cheetah.ErrorCatchers as ErrorCatchers"
+            "  # noqa: F401 imported but unused",
+            "from Cheetah.compat import unicode"
+            "  # noqa: F401 imported but unused",
             ]
 
         self._importedVarNames = ['sys',
