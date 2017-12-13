@@ -1791,7 +1791,9 @@ class ModuleCompiler(SettingsManager, GenUtils):
             "from Cheetah.Version import \\\n"
             "    MinCompatibleVersionTuple as RequiredCheetahVersionTuple",
             "from Cheetah.Template import Template",
-            "from Cheetah.DummyTransaction import *",
+            "from Cheetah.DummyTransaction import DummyTransaction",
+            "from Cheetah.DummyTransaction import TransformerTransaction"
+            "  # noqa: F401",
             "from Cheetah.NameMapper import NotFound"
             "  # noqa: F401 imported but unused",
             "from Cheetah.NameMapper import "
