@@ -1166,7 +1166,7 @@ class AutoMethodCompiler(MethodCompiler):
         else:
             self.addChunk('trans = DummyTransaction()')
             self.addChunk('_dummyTrans = True')
-        self.addChunk('write = trans.response().write')
+        self.addChunk('write = trans.response().write  # noqa: F841')
         if self.setting('useNameMapper'):
             argNames = [arg[0] for arg in self._argStringList]
             allowSearchListAsMethArg = self.setting('allowSearchListAsMethArg')
@@ -1175,14 +1175,18 @@ class AutoMethodCompiler(MethodCompiler):
             elif allowSearchListAsMethArg and 'searchList' in argNames:
                 self.addChunk('SL = searchList')
             elif not self.isClassMethod() and not self.isStaticMethod():
-                self.addChunk('SL = self._CHEETAH__searchList')
+                self.addChunk(
+                    'SL = self._CHEETAH__searchList  # noqa: F841'
+                )
             else:
                 self.addChunk('SL = [KWS]')
         if self.setting('useFilters'):
             if self.isClassMethod() or self.isStaticMethod():
                 self.addChunk('_filter = lambda x, **kwargs: unicode(x)')
             else:
-                self.addChunk('_filter = self._CHEETAH__currentFilter')
+                self.addChunk(
+                    '_filter = self._CHEETAH__currentFilter  # noqa: F841'
+                )
         self.addChunk('')
         self.addChunk("#"*40)
         self.addChunk('# START - generated method body')
