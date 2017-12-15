@@ -432,7 +432,10 @@ class MethodCompiler(GenUtils):
 
     def addChunk(self, chunk):
         self.commitStrConst()
-        chunk = "\n" + self.indentation() + chunk
+        if chunk:
+            chunk = "\n" + self.indentation() + chunk
+        else:
+            chunk = "\n"
         self._methodBodyChunks.append(chunk)
 
     def appendToPrevChunk(self, appendage):
@@ -1244,7 +1247,7 @@ if not self._CHEETAH__instanceInitialized:
         if k in allowedKWs:
             cheetahKWArgs[k] = v
     self._initCheetahInstance(**cheetahKWArgs)
-""".replace('\n', '\n'+' '*8)
+""".replace('\n', '\n'+' '*8).rstrip(' ')
 
 
 class ClassCompiler(GenUtils):
