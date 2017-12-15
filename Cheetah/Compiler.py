@@ -2193,9 +2193,9 @@ if not hasattr(%(mainClassName)s, '_initCheetahAttributes'):
 # if run from command line:
 if __name__ == '__main__':
     from Cheetah.TemplateCmdLineIface import CmdLineIface
-    CmdLineIface(templateObj=%(className)s()).run()
-
-""" % {'className': self._mainClassName}
+    CmdLineIface(templateObj=%(className)s()).run()""" % {
+            'className': self._mainClassName
+        }
 
 
 ##################################################
